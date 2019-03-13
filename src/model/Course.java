@@ -2,18 +2,37 @@ package model;
 
 import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutput;
+import java.io.ObjectOutputStream;
 import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.List;
 
 public class Course {
+	public final static String PATH_FILE = "data/course.dafr";
 	private List<Student> students;
 	
-	public Course() {
-		students = new ArrayList<>();
+	public Course(String archi) {
+		File archivo = new File(archi);
+		if(archivo.exists()) {
+			try {
+				ObjectInputStream ois = new ObjectInputStream(new FileInputStream(archivo));
+				students = (ArrayList)ois.readObject();
+				ois.close();
+			}
+			catch(Exception e) {
+				
+			}
+		}
+		else {
+			students = new ArrayList<>();
+		}
 	}
 	
 	public void loadStudentsFile(String path, String sep) throws IOException {
@@ -59,4 +78,20 @@ public class Course {
 		pw.close();
 	}
 	
+	public void save() {
+		ObjectOutputStream oos;
+		try {
+			oos = new ObjectOutputStream(new FileOutputStream(PATH_FILE));
+
+			oos.writeObject(students);
+			oos.close();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+	
+	public List<Student> getStudents() {
+		return students;
+	}
 }

@@ -1,6 +1,8 @@
 package model;
 
-public class Student {
+import java.io.Serializable;
+
+public class Student implements Serializable {
 	private String code;
 	private int semester;
 	private double average; //accumulatedAverage
